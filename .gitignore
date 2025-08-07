@@ -1,0 +1,13 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Entorno
+.env
+
+# Logs
+logs/
+*.log
+
+# Sistemas
+.DS_Store

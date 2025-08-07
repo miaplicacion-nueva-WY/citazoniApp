@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiénes Somos - Citazioni App</title>
+  <link rel="stylesheet" href="styles.css?v=4">
+  <style>
+    :root {
+      --pink: #ff6bcb;
+      --light-pink: #ffe2f0;
+      --dark-pink: #cc2a79;
+      --gray-dark: #555;
+    }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--light-pink);
+      color: #333;
+    }
+    .top-navbar {
+      background: #fff;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      position: fixed;
+      top: 0; left: 0; width: 100%;
+      z-index: 1000;
+    }
+    .navbar-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      padding: 12px 0;
+    }
+    .nav-btn {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 16px;
+      border-radius: 20px;
+      background: var(--pink);
+      color: #fff;
+      transition: background 0.3s;
+    }
+    .nav-btn:hover {
+      background: var(--dark-pink);
+    }
+    header {
+      margin-top: 60px;
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, var(--pink), #ffa9e0);
+      color: #fff;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2.8rem;
+    }
+    header p {
+      margin: 10px 0 0;
+      font-size: 1.2rem;
+      opacity: 0.9;
+    }
+    .content-section {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+    .about-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .about-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+    }
+    .about-card h2 {
+      margin-top: 0;
+      color: var(--dark-pink);
+      font-size: 1.5rem;
+    }
+    .about-card p {
+      color: var(--gray-dark);
+      line-height: 1.6;
+    }
+    /* Sección de equipo opcional */
+    .team-section {
+      max-width: 1000px;
+      margin: 0 auto 60px;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .team-section h2 {
+      color: var(--dark-pink);
+      margin-bottom: 20px;
+      font-size: 2rem;
+    }
+    .team-members {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .member-card {
+      background: #fff;
+      border-radius: 12px;
+      width: 200px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+    .member-card:hover {
+      transform: translateY(-6px);
+    }
+    .member-card img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 12px;
+    }
+    .member-card h3 {
+      margin: 8px 0 4px;
+      font-size: 1.1rem;
+      color: #333;
+    }
+    .member-card p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--gray-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR FRESÓN -->
+  <nav class="top-navbar">
+    <div class="navbar-buttons">
+      <a href="https://wa.me/5218112345678" target="_blank" class="nav-btn">📱 WhatsApp</a>
+      <a href="index.html" class="nav-btn">🏠 Inicio</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header>
+    <h1>Quiénes Somos 🩷</h1>
+    <p>Conectando pacientes y doctores con estilo y cariño.</p>
+  </header>
+
+  <!-- MISIÓN · VISIÓN · POR QUÉ -->
+  <main class="content-section">
+    <section class="about-card">
+      <h2>Nuestra Misión</h2>
+      <p>Facilitar la gestión de citas médicas de forma rápida, intuitiva y segura, conectando pacientes con profesionales de la salud.</p>
+    </section>
+
+    <section class="about-card">
+      <h2>Visión</h2>
+      <p>Ser la plataforma líder en agendamiento médico, ofreciendo un ecosistema digital accesible para todos.</p>
+    </section>
+
+    <section class="about-card">
+      <h2>¿Por qué Citazioni?</h2>
+      <p>Porque creemos que la salud debe ser accesible y organizada. Nuestra app está diseñada con cariño, simplicidad y tecnología de calidad.</p>
+    </section>
+  </main>
+
+  <!-- EQUIPO (opcional) -->
+  <section class="team-section">
+    <h2>Nuestro Equipo</h2>
+    <div class="team-members">
+      <div class="member-card">
+        <h3>Yamileth G.</h3>
+        <p>CEO & Fundadora</p>
+      </div>
+      <div class="member-card">
+        <h3>Wendy M.</h3>
+        <p>CTO & Dev</p>
+      </div>
+      <div class="member-card">
+        <h3>Said M.</h3>
+        <p>UX/UI Designer</p>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

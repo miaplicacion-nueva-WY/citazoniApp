@@ -1,0 +1,7 @@
+<nav class="top-navbar">
+    <div class="navbar-buttons">
+      <a href="https://wa.me/5218112345678" target="_blank" class="nav-btn">📱 WhatsApp</a>
+      <a href="quienes-somos.html" class="nav-btn">Quiénes Somos</a>
+      <button class="logout-btn" onclick="logout()">🚪 Cerrar sesión</button>
+    </div>
+  </nav>

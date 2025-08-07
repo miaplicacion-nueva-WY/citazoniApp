@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Citazioni App - Login / Registro</title>
+  <link rel="stylesheet" href="styles.css?v=4">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="top-navbar">
+    <div class="navbar-buttons">
+      <a href="https://wa.me/5218112345678" class="nav-btn" target="_blank">📱 WhatsApp</a>
+      <a href="quienes-somos.html" class="nav-btn">Quiénes Somos</a>
+    </div>
+  </nav>
+
+  <!-- LOGIN -->
+  <div class="login-container">
+    <div class="login-left">
+      <h2>Iniciar Sesión</h2>
+      <form id="loginForm">
+        <input type="email" id="loginCorreo" placeholder="Correo electrónico" required><br>
+        <input type="password" id="loginPassword" placeholder="Contraseña" required><br>
+        <button type="submit" class="btn-primary">Iniciar Sesión</button>
+      </form>
+      <p><a href="#">¿Olvidaste tu contraseña?</a></p>
+    </div>
+    <div class="login-right">
+      <h2>Bienvenido 🩷</h2>
+      <p>¿Aún no tienes cuenta?</p>
+      <button id="showRegister" class="btn-secondary">Registrarse</button>
+    </div>
+  </div>
+
+  <!-- REGISTRO -->
+  <div class="register-container" id="registerContainer" style="display:none;">
+    <h2>Registro de Usuario 🩷</h2>
+    <form id="registerForm">
+      <input type="text" id="nombre" placeholder="Nombre completo" required><br>
+      <input type="email" id="correo" placeholder="Correo electrónico" required><br>
+      <input type="password" id="password" placeholder="Contraseña" required><br>
+      <select id="rol" required>
+        <option value="">Selecciona un rol</option>
+        <option value="paciente">Paciente</option>
+        <option value="doctor">Doctor</option>
+      </select><br>
+      <div id="tokenContainer" style="display:none;">
+        <input type="text" id="tokenDoctor" placeholder="Token de invitación (doctores)"><br>
+      </div>
+      <button type="submit" class="btn-primary">Registrarse</button>
+    </form>
+    <button id="backToLogin" class="btn-secondary">Volver</button>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>

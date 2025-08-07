@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard Paciente</title>
+  <link rel="stylesheet" href="dashboard-paciente.css"/>
+</head>
+<body>
+  <!-- Botón cerrar sesión -->
+  <nav class="top-navbar">
+    <div class="navbar-buttons">
+      <a href="https://wa.me/5218112345678" target="_blank" class="nav-btn">📱 WhatsApp</a>
+      <a href="quienes-somos.html" class="nav-btn">Quiénes Somos</a>
+      <button class="logout-btn" onclick="logout()">🚪 Cerrar sesión</button>
+    </div>
+  </nav>
+
+  <!-- Bienvenida -->
+  <header class="main-header">
+    <h1>Bienvenida, <span id="pacienteName"></span> 🌸</h1>
+  </header>
+
+  <!-- Sección Agendar Cita -->
+  <section id="scheduleSection" class="section">
+    <h2>Agendar Cita</h2>
+    <form id="scheduleForm" class="inline-form">
+      <!-- 1) Selección de especialidad -->
+      <select id="specialtySelect" required>
+        <option value="">Selecciona especialidad</option>
+        <option value="General">General</option>
+        <option value="Pedagogía">Pedagogía</option>
+        <option value="Ginecología">Ginecología</option>
+        <option value="Neurología">Neurología</option>
+        <option value="Cardiología">Cardiología</option>
+      </select>
+
+      <!-- 2) Lista de doctores FILTRADA por especialidad -->
+      <select id="doctorSelect" required>
+        <option value="">Selecciona doctor</option>
+      </select>
+
+      <input type="date" id="citaFecha" required>
+      <input type="time" id="citaHora" required>
+      <input type="text" id="citaMotivo" placeholder="Motivo (opcional)">
+      <button type="submit">Agendar</button>
+    </form>
+    <p id="scheduleMessage"></p>
+  </section>
+
+  <!-- Historial de Citas -->
+  <section id="historySection" class="section active">
+    <h2>Historial de Citas</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Doctor</th><th>Fecha</th><th>Hora</th><th>Motivo</th>
+        </tr>
+      </thead>
+      <tbody id="historyBody"></tbody>
+    </table>
+  </section>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    if (!token) location.href = 'index.html';
+
+    // Mostrar nombre del paciente
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    document.getElementById('pacienteName').innerText = payload.nombre;
+
+    function logout() {
+      localStorage.removeItem('token');
+      location.href = 'index.html';
+    }
+
+    // 2) Al cambiar especialidad, cargar lista de doctores correspondientes
+    document.getElementById('specialtySelect').addEventListener('change', async (e) => {
+      const spec = e.target.value;
+      const res = await fetch(`${API}/doctors?especialidad=${encodeURIComponent(spec)}`, {
+        headers: { 'Authorization': token }
+      });
+      const doctors = await res.json();
+      const doctorSelect = document.getElementById('doctorSelect');
+      // Reiniciar opciones
+      doctorSelect.innerHTML = '<option value="">Selecciona doctor</option>';
+      // Llenar con los doctores recibidos
+      doctors.forEach(doc => {
+        const opt = document.createElement('option');
+        opt.value = doc.id;
+        opt.textContent = `${doc.nombre} (${spec})`;
+        doctorSelect.appendChild(opt);
+      });
+    });
+
+    // Envío del formulario de cita
+    document.getElementById('scheduleForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const doctor_id = document.getElementById('doctorSelect').value;
+      const fecha     = document.getElementById('citaFecha').value;
+      const hora      = document.getElementById('citaHora').value;
+      const motivo    = document.getElementById('citaMotivo').value;
+      const res = await fetch(`${API}/appointments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ doctor_id, fecha, hora, motivo })
+      });
+      const data = await res.json();
+      document.getElementById('scheduleMessage').innerText =
+        res.ok ? data.message : `Error: ${data.message}`;
+      if (res.ok) loadHistory();
+    });
+
+    // Cargar historial de citas
+    async function loadHistory() {
+      const res = await fetch(`${API}/appointments?paciente=${payload.id}`, {
+        headers: { 'Authorization': token }
+      });
+      const list = await res.json();
+      const tbody = document.getElementById('historyBody');
+      tbody.innerHTML = '';
+      list.forEach(cita => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${cita.nombre_doc}</td>
+          <td>${cita.fecha}</td>
+          <td>${cita.hora}</td>
+          <td>${cita.motivo || ''}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Inicializar historial
+    loadHistory();
+  </script>
+</body>
+</html>

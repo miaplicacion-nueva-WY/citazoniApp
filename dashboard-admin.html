@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Panel de Admin</title>
+  <link rel="stylesheet" href="dashboard-admin.css"/>
+</head>
+<body>
+  <nav class="top-navbar">
+    <div class="navbar-buttons">
+      <a href="https://wa.me/5218112345678" target="_blank" rel="noopener" class="nav-btn">📱 WhatsApp</a>
+      <a href="quienes-somos.html" class="nav-btn">Quiénes Somos</a>
+      <button class="logout-btn" onclick="logout()">🚪 Cerrar sesión</button>
+    </div>
+  </nav>
+  <header><h1>Bienvenida, <span id="adminName"></span></h1></header>
+  <div class="tabs">
+    <button id="tabDoctors" class="active">Doctores</button>
+    <!-- …otras pestañas… -->
+  </div>
+
+  <!-- Sección Doctores -->
+  <section id="sectionDoctors" class="section active">
+    <h2>Gestionar Doctores</h2>
+    <form id="formDoctor" class="inline-form">
+      <input type="text" id="docNombre" placeholder="Nombre" required>
+      <input type="email" id="docCorreo" placeholder="Correo" required>
+      <input type="password" id="docPassword" placeholder="Contraseña" required>
+      <label for="docEspecialidad" class="visually-hidden">Especialidad</label>
+      <select id="docEspecialidad" required>
+        <option value="">Especialidad</option>
+        <option value="General">General</option>
+        <option value="Pedagogía">Pedagogía</option>
+        <option value="Ginecología">Ginecología</option>
+        <option value="Neurología">Neurología</option>
+        <option value="Cardiología">Cardiología</option>
+      </select>
+      <button type="submit">Agregar</button>
+    </form>
+    <table id="tableDoctors">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Correo</th>
+          <th>Especialidad</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </section>
+
+  <script>
+    const API = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    if (!token) location.href='index.html';
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    document.getElementById('adminName').innerText = payload.nombre;
+
+    function logout() {
+      localStorage.removeItem('token');
+      location.href='index.html';
+    }
+
+    // Cargar tabla de doctores
+    async function loadDoctors() {
+      const res = await fetch(`${API}/users?rol=doctor`, {
+        headers:{ 'Authorization': token }
+      });
+      const docs = await res.json();
+      const tbody = document.querySelector('#tableDoctors tbody');
+      tbody.innerHTML = '';
+      docs.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${d.nombre}</td>
+          <td>${d.correo}</td>
+          <td>${d.especialidad || ''}</td>
+          <td>
+            <button onclick="editDoctor(${d.id})">✏️</button>
+            <button onclick="deleteUser(${d.id},'doctor')">🗑️</button>
+          </td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Crear doctor
+    document.getElementById('formDoctor').onsubmit = async e => {
+      e.preventDefault();
+      const nombre = docNombre.value;
+      const correo = docCorreo.value;
+      const password = docPassword.value;
+      const especialidad = docEspecialidad.value;
+      await fetch(`${API}/users`, {
+        method:'POST',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ nombre, correo, password, rol:'doctor', especialidad })
+      });
+      e.target.reset();
+      loadDoctors();
+    };
+
+    // Editar doctor
+    async function editDoctor(id) {
+      const nombre = prompt('Nuevo nombre:');
+      const correo = prompt('Nuevo correo:');
+      const password = prompt('Nueva contraseña (vacío=no cambia):');
+      const especialidad = prompt('Nueva especialidad:','General');
+      const body = {};
+      if (nombre) body.nombre = nombre;
+      if (correo) body.correo = correo;
+      if (password) body.password = password;
+      if (especialidad) body.especialidad = especialidad;
+      await fetch(`${API}/users/${id}`, {
+        method:'PUT',
+        headers:{
+          'Content-Type':'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(body)
+      });
+      loadDoctors();
+    }
+
+    // Eliminar usuario (doctor)
+    async function deleteUser(id, role) {
+      if (!confirm('¿Eliminar?')) return;
+      await fetch(`${API}/users/${id}`, {
+        method:'DELETE',
+        headers:{ 'Authorization': token }
+      });
+      if (role==='doctor') loadDoctors();
+    }
+
+    // Inicial
+    loadDoctors();
+  </script>
+</body>
+</html>
